@@ -6,10 +6,13 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -45,7 +48,7 @@ fun ConverterFahrenheitCelsius(){
     var fahrenheitInput by remember { mutableStateOf("") }
 
     val fahrenheit = fahrenheitInput.toDoubleOrNull()
-    val celsius = fahrenheit?.let { (it - 32) * 5 / 9 }
+    val celsius = fahrenheit?.let { converterParaCelsius(it) }
 
     Column(
         modifier = Modifier
@@ -62,8 +65,23 @@ fun ConverterFahrenheitCelsius(){
             singleLine = true, // faz com que texto fique numa linha só
             modifier = Modifier.fillMaxWidth()
         )
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Text(
+            text = if(celsius != null)
+              "Equivale a %.1f ºC".format(celsius)
+            else
+                "Insira um valor válido",
+             style = MaterialTheme.typography.headlineMedium
+        )
     }
 }
+
+
+private fun converterParaCelsius(fahrenheit: Double): Double{
+    return (fahrenheit - 32) * 5/9
+}
+
 
 @Preview(showBackground = true)
 @Composable
