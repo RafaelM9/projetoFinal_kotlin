@@ -6,15 +6,18 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -45,10 +48,11 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun ConverterFahrenheitCelsius(){
-    var fahrenheitInput by remember { mutableStateOf("") }
+    var inputText by remember { mutableStateOf("") }
 
-    val fahrenheit = fahrenheitInput.toDoubleOrNull()
-    val celsius = fahrenheit?.let { converterParaCelsius(it) }
+    var resultadoConversao by remember { mutableStateOf("") }
+
+    var fahrenheitParaCelsious by remember { mutableStateOf(true) }
 
     Column(
         modifier = Modifier
@@ -57,30 +61,87 @@ fun ConverterFahrenheitCelsius(){
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        Text(
+            text = "Selecionar tipo de conversão:",
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+        ) {
+            Text(
+                text = "Fahrenheit → Celsius",
+                modifier = Modifier.weight(1f),
+                textAlign = androidx.compose.ui.text.style.TextAlign.End
+            )
+            Switch(
+                checked = !fahrenheitParaCelsious,
+                onCheckedChange = { fahrenheitParaCelsious = !it },
+                modifier = Modifier.padding(horizontal = 8.dp)
+            )
+            Text(
+                text = "Celsius → Fahrenheit",
+                modifier = Modifier.weight(1f),
+                textAlign = androidx.compose.ui.text.style.TextAlign.Start
+            )
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
         TextField(
-            value = fahrenheitInput,
-            onValueChange = {fahrenheitInput = it},
-            label = { Text("Temperatura em Fahrenheit") },
+            value = inputText,
+            onValueChange = {inputText = it},
+            label = {
+                Text(
+                    if (fahrenheitParaCelsious) {
+                        "Temperatura em Fahrenheit"
+                    }else {
+                        "Temperatura em Celsius"
+                    }
+                )
+            },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             singleLine = true, // faz com que texto fique numa linha só
             modifier = Modifier.fillMaxWidth()
         )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Button(onClick = {
+            val value = inputText.toDoubleOrNull()
+            resultadoConversao = if(value != null){
+                if (fahrenheitParaCelsious){
+                    val result = (value - 32) * 5 / 9
+                    "%.1f ºC".format(result)
+                }else{
+                    val result = (value * 9 / 5) + 32
+                    "%.1f ºF".format(result)
+                }
+            } else {
+                "Valor inválido"
+            }
+        }) {
+            Text("Converter")
+        }
+
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            text = if(celsius != null)
-              "Equivale a %.1f ºC".format(celsius)
-            else
-                "Insira um valor válido",
-             style = MaterialTheme.typography.headlineMedium
+            text = resultadoConversao,
+            style = MaterialTheme.typography.headlineMedium
         )
     }
 }
 
 
-private fun converterParaCelsius(fahrenheit: Double): Double{
-    return (fahrenheit - 32) * 5/9
-}
+//private fun converterParaCelsius(fahrenheit: Double): Double{
+//    return (fahrenheit - 32) * 5/9
+//}
 
 
 @Preview(showBackground = true)
