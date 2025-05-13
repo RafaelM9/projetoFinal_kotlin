@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">converterFahrenheitCelsius</string>
+    <string name="selecionar_tipo_de_convers_o">Sélectionnez le type de conversion :</string>
+    <string name="temperatura_em_fahrenheit">Température en degrés Fahrenheit</string>
+    <string name="temperatura_em_celsius">Température en degrés Celsius</string>
+    <string name="converter">convertir</string>
+</resources>
