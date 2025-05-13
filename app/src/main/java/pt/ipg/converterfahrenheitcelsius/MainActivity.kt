@@ -55,7 +55,7 @@ fun ConverterFahrenheitCelsius(){
         TextField(
             value = fahrenheitInput,
             onValueChange = {fahrenheitInput = it},
-            label = { Text("Temperatura em Fahrenheit") }
+            label = { Text("Temperatura em Fahrenheits") }
         )
     }
 }
