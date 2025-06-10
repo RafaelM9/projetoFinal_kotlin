@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -51,11 +52,13 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun ConverterCelsiusFahrenheit(){
+fun ConverterCelsiusFahrenheit() {
     var celsiusParaFahrenheit by remember { mutableStateOf(true) }
     var inputText by remember { mutableStateOf("") }
+    var resultadoConversao by remember { mutableStateOf("") }
 
-    Column (
+
+    Column(
         modifier = Modifier
             .padding(32.dp)
             .fillMaxSize(),
@@ -68,7 +71,7 @@ fun ConverterCelsiusFahrenheit(){
             modifier = Modifier.padding(bottom = 8.dp)
         )
 
-        Row (
+        Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier
@@ -82,34 +85,63 @@ fun ConverterCelsiusFahrenheit(){
             )
             Switch(
                 checked = !celsiusParaFahrenheit,
-                onCheckedChange = { celsiusParaFahrenheit = !it},
+                onCheckedChange = { celsiusParaFahrenheit = !it },
                 modifier = Modifier.padding(horizontal = 8.dp)
             )
             Text(
-                text= "Fahrenheit -> Celsius",
+                text = "Fahrenheit -> Celsius",
                 modifier = Modifier.weight(1f),
                 textAlign = TextAlign.Start
             )
         }
-    }
 
-    Spacer(modifier = Modifier.height(24.dp))
 
-    TextField(
-        value = inputText,
-        onValueChange = { inputText = it},
-        label = {
-            Text(
-                if (celsiusParaFahrenheit){
-                    "temperatura em Celsius"
-                }else{
-                    "Temperatura em Fahrenheit"
+        Spacer(modifier = Modifier.height(24.dp))
+
+        TextField(
+            value = inputText,
+            onValueChange = { inputText = it },
+            label = {
+                Text(
+                    if (celsiusParaFahrenheit) {
+                        "temperatura em Celsius"
+                    } else {
+                        "Temperatura em Fahrenheit"
+                    }
+                )
+            },
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Button(onClick = {
+            val valor = inputText.toDoubleOrNull()
+
+            resultadoConversao = if (valor != null) {
+                if (celsiusParaFahrenheit) {
+                    val resultado = (valor * 9 / 5) + 32
+                    "%.1f ºF".format(resultado)
+                } else {
+                    val resultado = (valor - 32) * 5 / 9
+                    "%.1f ºC".format(resultado)
                 }
-            )
-        },
-        singleLine = true,
-        modifier = Modifier.fillMaxWidth()
-    )
+            } else {
+                "Valor invalido"
+            }
+        }) {
+            Text("Converter")
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Text(
+            text = resultadoConversao,
+            style = MaterialTheme.typography.headlineMedium
+        )
+
+    }
 }
 
 @Preview(showBackground = true)
