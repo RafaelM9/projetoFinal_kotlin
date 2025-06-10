@@ -7,14 +7,18 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -49,6 +53,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun ConverterCelsiusFahrenheit(){
     var celsiusParaFahrenheit by remember { mutableStateOf(true) }
+    var inputText by remember { mutableStateOf("") }
 
     Column (
         modifier = Modifier
@@ -87,6 +92,24 @@ fun ConverterCelsiusFahrenheit(){
             )
         }
     }
+
+    Spacer(modifier = Modifier.height(24.dp))
+
+    TextField(
+        value = inputText,
+        onValueChange = { inputText = it},
+        label = {
+            Text(
+                if (celsiusParaFahrenheit){
+                    "temperatura em Celsius"
+                }else{
+                    "Temperatura em Fahrenheit"
+                }
+            )
+        },
+        singleLine = true,
+        modifier = Modifier.fillMaxWidth()
+    )
 }
 
 @Preview(showBackground = true)
