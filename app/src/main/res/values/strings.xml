@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">conversorCelsiusFahrenheit</string>
+    <string name="selecionar_tipo_de_convers_o">Selecionar tipo de conversão</string>
+    <string name="temperatura_em_celsius">Temperatura em Celsius</string>
+    <string name="temperatura_em_fahrenheit">Temperatura em Fahrenheit</string>
+    <string name="converter">Converter</string>
 </resources>

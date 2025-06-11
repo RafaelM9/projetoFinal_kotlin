@@ -28,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -66,7 +67,7 @@ fun ConverterCelsiusFahrenheit() {
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "Selecionar tipo de conversão",
+            text = stringResource(R.string.selecionar_tipo_de_convers_o),
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.padding(bottom = 8.dp)
         )
@@ -104,9 +105,9 @@ fun ConverterCelsiusFahrenheit() {
             label = {
                 Text(
                     if (celsiusParaFahrenheit) {
-                        "temperatura em Celsius"
+                        stringResource(R.string.temperatura_em_celsius)
                     } else {
-                        "Temperatura em Fahrenheit"
+                        stringResource(R.string.temperatura_em_fahrenheit)
                     }
                 )
             },
@@ -131,7 +132,7 @@ fun ConverterCelsiusFahrenheit() {
                 "Valor invalido"
             }
         }) {
-            Text("Converter")
+            Text(stringResource(R.string.converter))
         }
 
         Spacer(modifier = Modifier.height(24.dp))
