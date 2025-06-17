@@ -41,11 +41,11 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ConversorCelsiusFahrenheitTheme {
-                    Surface(
-                        modifier = Modifier.fillMaxSize(),
-                        color = Color(0xFFBBDEFB)
+                    Surface( //cria superficie para ecra
+                        modifier = Modifier.fillMaxSize(), // ocupa o ecra todo
+                        color = Color(0xFFBBDEFB) // Mete o fundo azul-claro
                     ) {
-                        ConverterCelsiusFahrenheit()
+                        ConverterCelsiusFahrenheit() // chama a função do conversor
                     }
 
             }
@@ -55,91 +55,97 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun ConverterCelsiusFahrenheit() {
-    var celsiusParaFahrenheit by remember { mutableStateOf(true) }
-    var inputText by remember { mutableStateOf("") }
-    var resultadoConversao by remember { mutableStateOf("") }
+    var celsiusParaFahrenheit by remember { mutableStateOf(true) } //variavel que guarda estado se conversao e celsius para fahrenheit
+
+    var inputText by remember { mutableStateOf("") } // variavel que gurda texto introduzido pelo utilizador
+
+    var resultadoConversao by remember { mutableStateOf("") } // variavel para guardar resultado da conversão
 
 
-    Column(
-        modifier = Modifier
-            .padding(32.dp)
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+    Column( // coluna para organizar elementos na vertical
+        modifier = Modifier // para alterações
+            .padding(32.dp) //espaçamento de 32.dp
+            .fillMaxSize(), // ocupa todo o espaço disponivel
+        horizontalAlignment = Alignment.CenterHorizontally, //alinha elementos na horizontal no centro
+        verticalArrangement = Arrangement.Center //Alinha os elementos na vertical no centro
     ) {
-        Text(
-            text = stringResource(R.string.selecionar_tipo_de_convers_o),
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(bottom = 8.dp)
+        Text( //texto que pede seleção do tipo de conversão
+            text = stringResource(R.string.selecionar_tipo_de_convers_o), //permite a tradução automática da app para diferentes idiomas
+            style = MaterialTheme.typography.titleMedium, //estilo do titulo medio
+            modifier = Modifier.padding(bottom = 8.dp) //espaçamento de 8.dp na parte inferior
         )
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
+        Row( //linha com um switch para alterar tipo de conversao
+            verticalAlignment = Alignment.CenterVertically, //alinha vertical ao centro
+            horizontalArrangement = Arrangement.Center, //alinha horizontal ao centro
+            modifier = Modifier //para alterações
+                .fillMaxWidth() // ocupa largura toda disponivel
+                .padding(8.dp) //margem de 8.dp nos lados, topo e baixo
         ) {
-            Text(
+            Text( // texto que indica o tipo de conversão (celsius pra fahrenheit)
                 text = "Celsius -> Fahrenheit",
-                modifier = Modifier.weight(1f),
-                textAlign = TextAlign.End
+                modifier = Modifier.weight(1f), //ocupa metade da linha
+                textAlign = TextAlign.End //alinha texto a direita
             )
-            Switch(
-                checked = !celsiusParaFahrenheit,
-                onCheckedChange = { celsiusParaFahrenheit = !it },
+            Switch( //switch para alterar entre tipos de conversao
+                checked = !celsiusParaFahrenheit, //faz o inverso deivido a label trocar
+                onCheckedChange = { celsiusParaFahrenheit = !it }, // altera o estado da variavel
                 modifier = Modifier.padding(horizontal = 8.dp)
             )
-            Text(
+            Text( //texto que indica o tipo de conversão (fahrenheit pra celsius)
                 text = "Fahrenheit -> Celsius",
-                modifier = Modifier.weight(1f),
-                textAlign = TextAlign.Start
+                modifier = Modifier.weight(1f), // ocupa metade da linha
+                textAlign = TextAlign.Start //alinha texto a esquerda
             )
         }
 
-
+        //adiciona espaço na vertical entre o switch e campo de texto(TextField)
         Spacer(modifier = Modifier.height(24.dp))
 
         TextField(
             value = inputText,
-            onValueChange = { inputText = it },
-            label = {
+            onValueChange = { inputText = it }, //atualiza estado ao escrever
+            label = { // esta muda de acordo com o tipo de conversão
                 Text(
                     if (celsiusParaFahrenheit) {
-                        stringResource(R.string.temperatura_em_celsius)
+                        stringResource(R.string.temperatura_em_celsius) //permite a tradução automática da app para diferentes idiomas
                     } else {
-                        stringResource(R.string.temperatura_em_fahrenheit)
+                        stringResource(R.string.temperatura_em_fahrenheit) //permite a tradução automática da app para diferentes idiomas
                     }
                 )
             },
             // adiciona teclado numerico para introduzir numeros
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth()
+            singleLine = true, //texto introduzido numa linha
+            modifier = Modifier.fillMaxWidth() //ocupa toda a largura disponivel
         )
 
+        //espaço de 24.dp
         Spacer(modifier = Modifier.height(24.dp))
 
-        Button(onClick = {
-            val valor = inputText.toDoubleOrNull()
+        Button(onClick = { //botão para conversao
+            val valor = inputText.toDoubleOrNull() //converte texto inserido para double
 
-            resultadoConversao = if (valor != null) {
+            resultadoConversao = if (valor != null) { //se resultado for diferente de null, procede para a conversao
                 if (celsiusParaFahrenheit) {
                     val resultado = (valor * 9 / 5) + 32
-                    "%.1f ºF".format(resultado)
+                    "%.1f ºF".format(resultado) //1 casa decimal e simbolo
                 } else {
                     val resultado = (valor - 32) * 5 / 9
-                    "%.1f ºC".format(resultado)
+                    "%.1f ºC".format(resultado) //1 casa decimal e simbolo
                 }
             } else {
+                //se valor não é valido mostra uma mensagem de erro
                 "Valor invalido"
             }
         }) {
-            Text(stringResource(R.string.converter))
+            Text(stringResource(R.string.converter)) //texto do botao
         }
 
+        // espaço de 24.dp
         Spacer(modifier = Modifier.height(24.dp))
 
+        //exibe resultado da conversao
         Text(
             text = resultadoConversao,
             style = MaterialTheme.typography.headlineMedium
