@@ -22,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -33,6 +34,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import pt.ipg.conversorcelsiusfahrenheit.ui.theme.ConversorCelsiusFahrenheitTheme
 
 class MainActivity : ComponentActivity() {
@@ -45,7 +50,8 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.fillMaxSize(), // ocupa o ecra todo
                         color = Color(0xFFBBDEFB) // Mete o fundo azul-claro
                     ) {
-                        ConverterCelsiusFahrenheit() // chama a função do conversor
+                        //ConverterCelsiusFahrenheit() // chama a função do conversor
+                        Navigation()
                     }
 
             }
@@ -53,8 +59,11 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+
+
+
 @Composable
-fun ConverterCelsiusFahrenheit() {
+fun ConverterCelsiusFahrenheit(navController: NavHostController, historico: MutableList<String>) {
     var celsiusParaFahrenheit by remember { mutableStateOf(true) } //variavel que guarda estado se conversao e celsius para fahrenheit
 
     var inputText by remember { mutableStateOf("") } // variavel que gurda texto introduzido pelo utilizador
@@ -127,13 +136,18 @@ fun ConverterCelsiusFahrenheit() {
             val valor = inputText.toDoubleOrNull() //converte texto inserido para double
 
             resultadoConversao = if (valor != null) { //se resultado for diferente de null, procede para a conversao
-                if (celsiusParaFahrenheit) {
+                val resultadoFormatado = if (celsiusParaFahrenheit) {
                     val resultado = (valor * 9 / 5) + 32
                     "%.1f ºF".format(resultado) //1 casa decimal e simbolo
                 } else {
                     val resultado = (valor - 32) * 5 / 9
                     "%.1f ºC".format(resultado) //1 casa decimal e simbolo
                 }
+
+                // Guarda no histórico
+                historico.add("${inputText} -> $resultadoFormatado")
+                resultadoFormatado
+
             } else {
                 //se valor não é valido mostra uma mensagem de erro
                 "Valor invalido"
@@ -142,22 +156,74 @@ fun ConverterCelsiusFahrenheit() {
             Text(stringResource(R.string.converter)) //texto do botao
         }
 
+
         // espaço de 24.dp
         Spacer(modifier = Modifier.height(24.dp))
 
         //exibe resultado da conversao
         Text(
             text = resultadoConversao,
-            style = MaterialTheme.typography.headlineMedium
+            style = MaterialTheme.typography.headlineMedium //estilo do resultado
         )
+
+        //espaço entre botões
+        Spacer(modifier = Modifier.height(16.dp))
+
+        //botão para navegar para o histórico
+        Button(
+            onClick = {
+                navController.navigate("historico") //abre historico
+            }
+        ) {
+            Text(text = stringResource(R.string.ver_hist_rico))
+        }
 
     }
 }
+
+
+@Composable
+fun HistoricoConversoes(navController: NavHostController, historico: List<String>) {
+    // ver lista de conversoes e voltar atras
+    Column( //forma de coluna
+        modifier = Modifier //para modificações
+            .fillMaxSize() // ocupar espaço vertical disponivel
+            .padding(16.dp) //espaçamento de 16.dp
+    ) {
+        // titulo da janela do historico
+        Text(
+            text = "Histórico de Conversões",
+            style = MaterialTheme.typography.headlineMedium, // estilo do titulo
+            modifier = Modifier.padding(bottom = 16.dp) //espaço inferior de 16.dp
+        )
+
+        // verifica se historico tem alguma coisa
+        if (historico.isEmpty()) {
+            Text("Nenhuma conversão realizada ainda.") // mensagem se tiver vazio
+        } else {
+            for (item in historico) {
+                Text(text = item, // texto da conversao
+                    modifier = Modifier.padding(vertical = 4.dp)) // espaço vertical 4.dp de cada item
+            }
+        }
+
+        Spacer(modifier = Modifier.weight(1f)) //ocupa espaço restante para empurrar butao para o fim
+
+        // botao para voltar para a tela principal
+        Button(onClick = {
+            navController.navigateUp() // navcontroller volta para a tela anterior
+        }) {
+            Text(stringResource(R.string.voltar)) // texto do botão
+        }
+    }
+}
+
+
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     ConversorCelsiusFahrenheitTheme {
-        ConverterCelsiusFahrenheit()
+        ConverterCelsiusFahrenheit(navController = rememberNavController(), historico = mutableListOf())
     }
 }

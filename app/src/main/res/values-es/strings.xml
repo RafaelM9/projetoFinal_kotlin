@@ -5,4 +5,6 @@
     <string name="temperatura_em_celsius">Temperatura en Celsius</string>
     <string name="temperatura_em_fahrenheit">Temperatura en grados Fahrenheit</string>
     <string name="converter">Convertir</string>
+    <string name="ver_hist_rico">Ver historial</string>
+    <string name="voltar">Volver atrás</string>
 </resources>
