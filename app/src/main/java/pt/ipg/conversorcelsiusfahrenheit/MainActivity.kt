@@ -51,7 +51,7 @@ class MainActivity : ComponentActivity() {
                         color = Color(0xFFBBDEFB) // Mete o fundo azul-claro
                     ) {
                         //ConverterCelsiusFahrenheit() // chama a função do conversor
-                        Navigation()
+                        Navigation() // chama função que controla navegação do ficheiro Navigation.kt
                     }
 
             }
@@ -144,9 +144,9 @@ fun ConverterCelsiusFahrenheit(navController: NavHostController, historico: Muta
                     "%.1f ºC".format(resultado) //1 casa decimal e simbolo
                 }
 
-                // Guarda no histórico
+                // Guarda no histórico conversao
                 historico.add("${inputText} -> $resultadoFormatado")
-                resultadoFormatado
+                resultadoFormatado //retorna valor formatado
 
             } else {
                 //se valor não é valido mostra uma mensagem de erro
